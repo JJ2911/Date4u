@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootswatch@5.1.0/dist/quartz/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<form data-th-object="${profile}" data-th-action="@{/save}" method="post">
+  <input type="text" data-th-field="*{id}" hidden>
+
+  <div class="mb-3">
+    <label for="inputNickname" class="form-label">
+      Nickname
+    </label>
+    <input type="text"
+           class="form-control"
+           id="inputNickname"
+           data-th-field="*{nickname}">
+  </div>
+
+  <div class="mb-3">
+    <label for="inputManelength" class="form-label">
+      Manelength
+    </label>
+    <input type="text"
+           class="form-control"
+           id="inputManelength"
+           data-th-field="*{manelength}">
+  </div>
+
+  <div class="mb-3">
+    <label for="inputGender" class="form-label">
+      Gender
+    </label>
+    <select data-th-field="*{gender}" id="inputGender">
+      <option th:value="1" th:text="FEE"></option>
+      <option th:value="2" th:text="MA"></option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="inputAttractedToGender" class="form-label">
+      Attracted to Gender
+    </label>
+    <input type="text"
+           id="inputAttractedToGender"
+           class="form-control"
+           data-th-field="*{attractedToGender}">
+  </div>
+
+  <div class="mb-3">
+    <label for="inputBirthdate" class="form-label">Birthdate</label>
+    <input type="date"
+           id="inputBirthdate"
+           class="form-control"
+           data-th-field="*{birthdate}">
+  </div>
+
+  <div class="mb-3">
+    Zuletzt gesehen: <span data-th-text="*{lastseen}">LAST-SEEN</span>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
