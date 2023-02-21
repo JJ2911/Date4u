@@ -1,4 +1,6 @@
-package com.tutego.date4u.core.profile;
+package com.tutego.date4u.core.profile.like;
+
+import com.tutego.date4u.core.profile.Profile;
 
 import java.io.Serializable;
 import java.util.Objects;

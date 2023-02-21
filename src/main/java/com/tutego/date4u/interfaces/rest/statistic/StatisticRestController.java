@@ -1,7 +1,7 @@
-package com.tutego.date4u.interfaces.rest;
+package com.tutego.date4u.interfaces.rest.statistic;
 
 import com.tutego.date4u.core.profile.ProfileRepository;
-import com.tutego.date4u.interfaces.rest.LastSeenStatistics.Data;
+import com.tutego.date4u.interfaces.rest.statistic.LastSeenStatistics.Data;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,4 +1,4 @@
-package com.tutego.date4u.interfaces.rest;
+package com.tutego.date4u.interfaces.rest.profile;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ProfileFormData {
-
   private long id;
   private String nickname;
   @DateTimeFormat( pattern = "yyyy-MM-dd" )

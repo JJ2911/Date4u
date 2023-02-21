@@ -1,4 +1,4 @@
-package com.tutego.date4u.interfaces.rest;
+package com.tutego.date4u.interfaces.rest.profile;
 
 import com.tutego.date4u.core.photo.PhotoService;
 import com.tutego.date4u.core.profile.Profile;
@@ -78,7 +78,7 @@ public class ProfileRestController {
   public ResponseEntity<?> delete( @PathVariable long id ) {
     if ( !profiles.existsById( id ) )
       return new ResponseEntity<>( HttpStatus.NOT_FOUND );
-    // profiles.deleteById( id );
+    profiles.deleteById( id );
     log.info( "delete resource {}", id );
     return new ResponseEntity<>( HttpStatus.OK );
   }

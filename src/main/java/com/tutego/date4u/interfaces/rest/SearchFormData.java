@@ -5,17 +5,19 @@ public class SearchFormData {
   private short maxAge;
   private short minManelength;
   private short maxManelength;
-  private byte gender;
+  private byte myGender;
+  private Byte attractedToGender;
 
   public SearchFormData() {
   }
 
-  public SearchFormData(short minAge, short maxAge, short minManelength, short maxManelength, byte gender) {
+  public SearchFormData(short minAge, short maxAge, short minManelength, short maxManelength, byte myGender, Byte attractedToGender) {
     this.minAge = minAge;
     this.maxAge = maxAge;
     this.minManelength = minManelength;
     this.maxManelength = maxManelength;
-    this.gender = gender;
+    this.myGender = myGender;
+    this.attractedToGender = attractedToGender;
   }
 
   public short getMinAge() {
@@ -50,12 +52,20 @@ public class SearchFormData {
     this.maxManelength = maxManelength;
   }
 
-  public byte getGender() {
-    return gender;
+  public byte getMyGender() {
+    return myGender;
   }
 
-  public void setGender(byte gender) {
-    this.gender = gender;
+  public void setMyGender(byte myGender) {
+    this.myGender = myGender;
+  }
+
+  public Byte getAttractedToGender() {
+    return attractedToGender;
+  }
+
+  public void setAttractedToGender(Byte attractedToGender) {
+    this.attractedToGender = attractedToGender;
   }
 
   @Override
@@ -65,7 +75,8 @@ public class SearchFormData {
             ", maxAge=" + maxAge +
             ", minManelength=" + minManelength +
             ", maxManelength=" + maxManelength +
-            ", gender=" + gender +
+            ", myGender=" + myGender +
+            ", attractedToGender=" + attractedToGender +
             '}';
   }
 }

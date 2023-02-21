@@ -17,9 +17,7 @@ import java.util.concurrent.Future;
 @Service
 @Validated
 public class PhotoService {
-
   private final Logger log = LoggerFactory.getLogger( getClass() );
-
   private final FileSystem fs;
   private final Thumbnail thumbnail;
   // private final ApplicationEventPublisher publisher;

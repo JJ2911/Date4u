@@ -12,14 +12,13 @@ import java.util.concurrent.Future;
 @Component
 public class FileSystem {
 
-  private final Path root = Paths.get( System.getProperty( "user.home" ) ).resolve( "fs" ).toAbsolutePath().normalize();
+  private final Path root = Paths.get(System.getProperty("user.home")).resolve("fs/unicorns").toAbsolutePath().normalize();
 
   public FileSystem() {
-    if ( !Files.isDirectory( root ) ) {
+    if (!Files.isDirectory(root)) {
       try {
-        Files.createDirectory( root );
-      }
-      catch ( IOException e ) {
+        Files.createDirectory(root);
+      } catch (IOException e) {
         e.printStackTrace();
       }
     }
@@ -29,29 +28,27 @@ public class FileSystem {
     return root.toFile().getFreeSpace();
   }
 
-  public byte[] load( String filename ) {
+  public byte[] load(String filename) {
     try {
-      Path path = resolve( filename );
-      return Files.readAllBytes( path );
-    }
-    catch ( IOException e ) {
-      throw new UncheckedIOException( e );
+      Path path = resolve(filename);
+      return Files.readAllBytes(path);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
     }
   }
 
-  public void store( String filename, byte[] bytes ) {
+  public void store(String filename, byte[] bytes) {
     try {
-      Files.write( resolve( filename ), bytes );
-    }
-    catch ( IOException e ) {
-      throw new UncheckedIOException( e );
+      Files.write(resolve(filename), bytes);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
     }
   }
 
-  private Path resolve( String filename ) {
-    Path path = root.resolve( filename ).toAbsolutePath().normalize();
-    if ( !path.startsWith( root ) )
-      throw new SecurityException( "Access to " + path + " denied" );
+  private Path resolve(String filename) {
+    Path path = root.resolve(filename).toAbsolutePath().normalize();
+    if (!path.startsWith(root))
+      throw new SecurityException("Access to " + path + " denied");
     return path;
   }
 

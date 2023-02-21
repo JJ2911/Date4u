@@ -1,4 +1,4 @@
-package com.tutego.date4u.interfaces.rest;
+package com.tutego.date4u.interfaces.rest.profile;
 
 import com.tutego.date4u.core.profile.Profile;
 

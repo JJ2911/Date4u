@@ -1,5 +1,6 @@
-package com.tutego.date4u.core.profile;
+package com.tutego.date4u.core.profile.unicorn;
 
+import com.tutego.date4u.core.profile.Profile;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,9 +9,7 @@ public class Unicorn {
 
   @Id @GeneratedValue( strategy = GenerationType.IDENTITY )
   private Long id;
-
   private String email;
-
   private String password;
 
   @OneToOne

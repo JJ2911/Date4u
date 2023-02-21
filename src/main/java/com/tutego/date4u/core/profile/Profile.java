@@ -2,6 +2,7 @@ package com.tutego.date4u.core.profile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tutego.date4u.core.photo.Photo;
+import com.tutego.date4u.core.profile.unicorn.Unicorn;
 import org.springframework.lang.Nullable;
 
 import jakarta.persistence.*;
@@ -149,6 +150,10 @@ public class Profile {
   public Profile add(Photo photo) {
     photos.add(photo);
     return this;
+  }
+
+  public byte getAge() {
+    return (byte) (LocalDate.now().getYear() - birthdate.getYear());
   }
 
   public Set<Profile> getProfilesThatILike() {

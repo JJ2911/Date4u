@@ -7,75 +7,73 @@
   <title>Title</title>
 </head>
 <body>
+<header data-th-insert="fragments/header :: header"></header>
 
-<div class="container">
-  <form data-th-object="${search}" data-th-action="@{/search}" method="post">
+<main>
+  <div class="container">
+    <form data-th-object="${search}" data-th-action="@{/search}" method="post">
+      <div class="row">
+        <div class="col-md-10 my-2">
+          <h2>Searching for Unicorns...</h2>
+        </div>
+
+        <div class="col-md-2 d-flex justify-content-end align-items-center my-2">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <label for="inputAge" class="form-label">Age</label>
+          <div class="d-flex flex-row input-group input-group-sm">
+            <input type="number" class="form-control" min="18" max="99"
+                   id="inputAge" data-th-field="*{minAge}">
+            <span class="input-group-text">to</span>
+            <input type="number" class="form-control" min="18" max="99"
+                   data-th-field="*{maxAge}">
+          </div>
+        </div>
+
+        <div class="col-md-3 me-auto mb-3">
+          <label for="inputManelength" class="form-label">Manelength</label>
+          <div class="d-flex flex-row input-group input-group-sm">
+            <input type="number" class="form-control" min="0" max="99"
+                   id="inputManelength" data-th-field="*{minManelength}">
+            <span class="input-group-text">to</span>
+            <input type="number" class="form-control" min="0" max="99"
+                   data-th-field="*{maxManelength}">
+          </div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <label for="inputGender" class="form-label me-2">Gender</label>
+          <div class="d-flex justify-content-center align-items-center">
+            <select class="form-select form-select-sm" id="inputGender"
+                    data-th-field="*{attractedToGender}">
+              <option th:value="0" th:text="BI"></option>
+              <option th:value="1" th:text="FEE"></option>
+              <option th:value="2" th:text="MA"></option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="container">
     <div class="row">
-      <div class="col-md-10 my-2">
-        <h2>Searching for Unicorns...</h2>
-      </div>
-
-      <div class="col-md-2 d-flex justify-content-center align-items-center my-2">
-        <button type="submit" class="btn btn-primary">Search</button>
-      </div>
-
-      <div class="col-md-5 mb-3">
-        <label for="inputAge" class="form-label">Age</label>
-        <div class="d-flex flex-row input-group input-group-sm">
-          <input type="number" class="form-control" min="18" max="99"
-                 id="inputAge" data-th-field="*{minAge}">
-          <span class="input-group-text">to</span>
-          <input type="number" class="form-control" min="18" max="99"
-                 data-th-field="*{maxAge}">
-        </div>
-      </div>
-
-      <div class="col-md-5 mb-3">
-        <label for="inputManelength" class="form-label">Manelength</label>
-        <div class="d-flex flex-row input-group input-group-sm">
-          <input type="number" class="form-control" min="0" max="99"
-                 id="inputManelength" data-th-field="*{minManelength}">
-          <span class="input-group-text">to</span>
-          <input type="number" class="form-control" min="0" max="99"
-                 data-th-field="*{maxManelength}">
-        </div>
-      </div>
-      <div class="col-md-2 mb-3">
-        <label for="inputGender" class="form-label me-2">Gender</label>
-        <div class="d-flex justify-content-center align-items-center">
-          <select class="form-select form-select-sm" id="inputGender"
-                  data-th-field="*{gender}">
-            <option th:value="0" th:text="BI"></option>
-            <option th:value="1" th:text="FEE"></option>
-            <option th:value="2" th:text="MA"></option>
-          </select>
+      <div data-th-each="profile : ${profiles}" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card">
+          <img src="..." class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 data-th-text="${profile.nickname}" class="card-title">NICKNAME</h5>
+            <p class="card-text">Age: <span data-th-text="${profile.getAge()}">AGE</span></p>
+            <p class="card-text">Manelength: <span data-th-text="${profile.manelength}">MANELENGTH</span></p>
+            <a href="#" class="btn btn-primary btn-sm">Go to Profile</a>
+          </div>
         </div>
       </div>
     </div>
-  </form>
-</div>
-
-
-<table class="table">
-  <thead>
-  <tr>
-    <th scope="col">ID</th>
-    <th scope="col">NICKNAME</th>
-    <th scope="col">BIRTHDATE</th>
-    <th scope="col">MANELENGTH</th>
-    <th scope="col">DESCRIPTION</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr data-th-each="profile : ${profiles}">
-    <td data-th-text="${profile.id}">ID</td>
-    <td data-th-text="${profile.nickname}">NICKNAME</td>
-    <td data-th-text="${profile.birthdate}">BIRTHDATE</td>
-    <td data-th-text="${profile.manelength}">MANELENGTH</td>
-    <td data-th-text="${profile.description}">DESCRIPTION</td>
-  </tr>
-  </tbody>
-</table>
+  </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 </body>

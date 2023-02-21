@@ -1,4 +1,4 @@
-package com.tutego.date4u.interfaces.rest;
+package com.tutego.date4u.interfaces.rest.statistic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

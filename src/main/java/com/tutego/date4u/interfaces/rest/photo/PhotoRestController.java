@@ -1,4 +1,4 @@
-package com.tutego.date4u.interfaces.rest;
+package com.tutego.date4u.interfaces.rest.photo;
 
 import com.tutego.date4u.core.photo.PhotoService;
 import org.springframework.http.MediaType;
@@ -12,15 +12,13 @@ public class PhotoRestController {
 
   private final PhotoService photos;
 
-  public PhotoRestController( PhotoService photos ) {
+  public PhotoRestController(PhotoService photos) {
     this.photos = photos;
   }
 
-  @GetMapping( path     = "/api/photos/{image}",
-               produces = MediaType.IMAGE_JPEG_VALUE
-  )
-  public ResponseEntity<?> photo( @PathVariable String image ) {
-    return ResponseEntity.of( photos.download( image ) );
+  @GetMapping(path = "/api/photos/{image}", produces = MediaType.IMAGE_JPEG_VALUE)
+  public ResponseEntity<?> photo(@PathVariable String image) {
+    return ResponseEntity.of(photos.download(image));
   }
 
 }

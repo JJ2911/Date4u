@@ -1,9 +1,13 @@
 package com.tutego.date4u.interfaces.rest;
 
 import com.tutego.date4u.core.profile.Profile;
-import com.tutego.date4u.core.profile.ProfileRepository;
+import com.tutego.date4u.core.profile.ProfileService;
+import com.tutego.date4u.interfaces.rest.profile.ProfileFormData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,16 +20,17 @@ import java.util.Optional;
 
 @Controller
 public class Date4uWebController {
-  private ProfileRepository profileRepository;
+  private ProfileService profileService;
   private final Logger log = LoggerFactory.getLogger( getClass() );
 
-  public Date4uWebController(ProfileRepository profileRepository) {
-    this.profileRepository = profileRepository;
+  @Autowired
+  public Date4uWebController(ProfileService profileService) {
+    this.profileService = profileService;
   }
 
   @RequestMapping( "/**" )
   public String indexPage(Model model) {
-    List<Profile> profiles = profileRepository.findAll();
+    List<Profile> profiles = profileService.getProfiles();
     model.addAttribute("totalProfiles", profiles.size());
 
     return "index";
@@ -33,7 +38,7 @@ public class Date4uWebController {
 
   @RequestMapping( "/profile/{id}" )
   public String profilePage(@PathVariable long id, Model model) {
-    Optional<Profile> optionalProfile = profileRepository.findById(id);
+    Optional<Profile> optionalProfile = profileService.getProfile(id);
     if (optionalProfile.isEmpty()) {
       return "redirect:/";
     }
@@ -57,17 +62,33 @@ public class Date4uWebController {
 
   @RequestMapping( "/search" )
   public String searchPage(Model model) {
-    model.addAttribute("profiles", profileRepository.findAll());
+    model.addAttribute("profiles", profileService.getProfiles());
     model.addAttribute("search", new SearchFormData());
 
     return "search";
   }
 
   @PostMapping( "/search" )
-  public String searchProfile( @ModelAttribute SearchFormData search, Model model ) {
-    log.info( search.toString() );
+  public String searchProfile( @ModelAttribute SearchFormData searchFormData, Model model ) {
+    log.info( searchFormData.toString() );
 
-    model.addAttribute("search", search);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Profile profile = profileService.getProfile(authentication.getName());
+    searchFormData.setMyGender((byte) profile.getGender());
+    List<Profile> profiles = profileService.search(searchFormData);
+
+    model.addAttribute("search", searchFormData);
+    model.addAttribute("profiles", profiles);
     return "search";
+  }
+
+  @RequestMapping( "/login" )
+  public String login() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication.isAuthenticated()) {
+      return "redirect:/";
+    }
+
+    return "login";
   }
 }
