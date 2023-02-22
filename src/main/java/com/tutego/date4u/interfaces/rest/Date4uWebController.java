@@ -6,6 +6,7 @@ import com.tutego.date4u.interfaces.rest.profile.ProfileFormData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,15 @@ import java.util.Optional;
 public class Date4uWebController {
   private ProfileService profileService;
   private final Logger log = LoggerFactory.getLogger( getClass() );
+
+  private boolean isAuthenticated() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || AnonymousAuthenticationToken.class.
+            isAssignableFrom(authentication.getClass())) {
+      return false;
+    }
+    return authentication.isAuthenticated();
+  }
 
   @Autowired
   public Date4uWebController(ProfileService profileService) {
@@ -84,8 +94,7 @@ public class Date4uWebController {
 
   @RequestMapping( "/login" )
   public String login() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication.isAuthenticated()) {
+    if (isAuthenticated()) {
       return "redirect:/";
     }
 

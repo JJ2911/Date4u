@@ -34,8 +34,10 @@ public class WebSecurityConfig {
                     .loginPage("/login")
                     .permitAll()
             )
-            .logout((logout) -> logout.permitAll());
-
+            .logout((logout) -> logout.permitAll()
+                    .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID"));
     return http.build();
   }
 
