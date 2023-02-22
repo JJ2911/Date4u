@@ -7,7 +7,7 @@
   <title>Title</title>
 </head>
 <body>
-<header data-th-insert="fragments/header :: header"></header>
+<header data-th-insert="~{fragments/header :: header}"></header>
 
 <main>
   <div class="container">
@@ -62,12 +62,17 @@
     <div class="row">
       <div data-th-each="profile : ${profiles}" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
         <div class="card">
-          <img src="..." class="card-img-top" alt="...">
+          <th:block data-th-each="photo : ${profile.getPhotos()}">
+            <img data-th-if="${photo.isProfilePhoto()}" data-th-src="@{|/api/photos/${photo.name}|}"
+                 class="card-img-top"
+                 data-th-title="${photo.name}"
+                 data-th-alt="${photo.name}">
+          </th:block>
           <div class="card-body">
             <h5 data-th-text="${profile.nickname}" class="card-title">NICKNAME</h5>
             <p class="card-text">Age: <span data-th-text="${profile.getAge()}">AGE</span></p>
             <p class="card-text">Manelength: <span data-th-text="${profile.manelength}">MANELENGTH</span></p>
-            <a href="#" class="btn btn-primary btn-sm">Go to Profile</a>
+            <a data-th-href="@{|/profile/${profile.id}|}" class="btn btn-primary btn-sm">Go to Profile</a>
           </div>
         </div>
       </div>
