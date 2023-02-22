@@ -7,7 +7,7 @@
   <title>Title</title>
 </head>
 <body>
-<header data-th-insert="fragments/header :: header"></header>
+<header data-th-insert="~{fragments/header :: header}"></header>
 
 <form data-th-object="${profile}" data-th-action="@{/save}" method="post">
   <input type="text" data-th-field="*{id}" hidden>
@@ -63,7 +63,7 @@
   <div class="mb-3">
     Zuletzt gesehen: <span data-th-text="*{lastseen}">LAST-SEEN</span>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary btn-sm">Save</button>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
