@@ -3,6 +3,7 @@ package com.tutego.date4u.interfaces.shell;
 import com.tutego.date4u.core.profile.*;
 import com.tutego.date4u.core.profile.like.Likes;
 import com.tutego.date4u.core.profile.like.LikesRepository;
+import com.tutego.date4u.core.profile.like.QLikes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Lazy;
