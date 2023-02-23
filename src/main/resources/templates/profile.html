@@ -9,62 +9,108 @@
 <body>
 <header data-th-insert="~{fragments/header :: header}"></header>
 
-<form data-th-object="${profile}" data-th-action="@{/save}" method="post">
-  <input type="text" data-th-field="*{id}" hidden>
+<main>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-4 ms-md-auto">
+        <th:block data-th-each="photo : ${photos}">
+          <img data-th-if="${photo.isProfilePhoto()}"
+               data-th-src="@{|/api/photos/${photo.name}|}"
+               data-th-title="${photo.name}"
+               data-th-alt="${photo.name}"
+               class="w-100">
+        </th:block>
 
-  <div class="mb-3">
-    <label for="inputNickname" class="form-label">
-      Nickname
-    </label>
-    <input type="text"
-           class="form-control"
-           id="inputNickname"
-           data-th-field="*{nickname}">
-  </div>
+        <div class="my-3">
+          Zuletzt gesehen: <span data-th-text="${profileFormData.lastseen}">LAST-SEEN</span>
+        </div>
+      </div>
 
-  <div class="mb-3">
-    <label for="inputManelength" class="form-label">
-      Manelength
-    </label>
-    <input type="text"
-           class="form-control"
-           id="inputManelength"
-           data-th-field="*{manelength}">
-  </div>
+      <div class="col-12 col-sm-6 col-md-6 col-lg-4 mt-4 me-md-auto ps-md-4">
+        <form data-th-object="${profileFormData}" data-th-action="@{/save}"
+              method="post">
+          <input type="text" data-th-field="*{id}" hidden>
 
-  <div class="mb-3">
-    <label for="inputGender" class="form-label">
-      Gender
-    </label>
-    <select data-th-field="*{gender}" id="inputGender">
-      <option th:value="1" th:text="FEE"></option>
-      <option th:value="2" th:text="MA"></option>
-    </select>
-  </div>
+          <div class="mb-3">
+            <label for="inputNickname" class="form-label">
+              Nickname
+            </label>
+            <input type="text"
+                   class="form-control form-control-sm"
+                   id="inputNickname"
+                   data-th-field="*{nickname}"
+                   data-th-readonly="${profileFormData.id} != ${myId}">
+          </div>
 
-  <div class="mb-3">
-    <label for="inputAttractedToGender" class="form-label">
-      Attracted to Gender
-    </label>
-    <input type="text"
-           id="inputAttractedToGender"
-           class="form-control"
-           data-th-field="*{attractedToGender}">
-  </div>
+          <div class="mb-3">
+            <label for="inputManelength" class="form-label">
+              Manelength
+            </label>
+            <input type="text"
+                   class="form-control form-control-sm"
+                   id="inputManelength"
+                   data-th-field="*{manelength}"
+                   data-th-readonly="${profileFormData.id} != ${myId}">
+          </div>
 
-  <div class="mb-3">
-    <label for="inputBirthdate" class="form-label">Birthdate</label>
-    <input type="date"
-           id="inputBirthdate"
-           class="form-control"
-           data-th-field="*{birthdate}">
-  </div>
+          <div class="mb-3">
+            <label for="inputGender" class="form-label">
+              Gender
+            </label>
+            <select data-th-field="*{gender}"
+                    data-th-disabled="${profileFormData.id} != ${myId}"
+                    class="form-select form-select-sm"
+                    data-th-classappend="(${profileFormData.id} != ${myId} ? 'text-black-50')"
+                    id="inputGender">
+              <option th:value="0" th:text="D"></option>
+              <option th:value="1" th:text="Female"></option>
+              <option th:value="2" th:text="Male"></option>
+            </select>
+          </div>
 
-  <div class="mb-3">
-    Zuletzt gesehen: <span data-th-text="*{lastseen}">LAST-SEEN</span>
+          <div class="mb-3">
+            <label for="inputAttractedToGender" class="form-label">
+              Attracted to Gender
+            </label>
+            <select data-th-field="*{attractedToGender}"
+                    data-th-disabled="${profileFormData.id} != ${myId}"
+                    class="form-select form-select-sm"
+                    data-th-classappend="(${profileFormData.id} != ${myId} ? 'text-black-50')"
+                    id="inputAttractedToGender">
+              <option th:value="0" th:text="D"></option>
+              <option th:value="1" th:text="Female"></option>
+              <option th:value="2" th:text="Male"></option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="inputBirthdate" class="form-label">Birthdate</label>
+            <input type="date"
+                   id="inputBirthdate"
+                   class="form-control form-control-sm"
+                   data-th-field="*{birthdate}"
+                   data-th-readonly="${profileFormData.id} != ${myId}">
+          </div>
+
+          <div class="mb-3">
+            <label for="inputDescription" class="form-label">Description</label>
+            <textarea
+                    id="inputDescription"
+                    class="form-control"
+                    data-th-field="*{description}"
+                    data-th-readonly="${profileFormData.id} != ${myId}">
+            </textarea>
+          </div>
+
+          <div class="d-flex justify-content-center align-items-center mb-3"
+          data-th-if="${profileFormData.id} == ${myId}">
+            <button type="submit" class="btn btn-primary btn-sm px-3">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-  <button type="submit" class="btn btn-primary btn-sm">Save</button>
-</form>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 </body>

@@ -2,6 +2,7 @@ package com.tutego.date4u.interfaces.rest;
 
 import com.tutego.date4u.core.profile.Profile;
 import com.tutego.date4u.core.profile.ProfileService;
+import com.tutego.date4u.core.profile.unicorn.UnicornService;
 import com.tutego.date4u.interfaces.rest.profile.ProfileFormData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @Controller
 public class Date4uWebController {
   private ProfileService profileService;
+  private UnicornService unicornService;
   private final Logger log = LoggerFactory.getLogger( getClass() );
 
   private boolean isAuthenticated() {
@@ -34,15 +36,13 @@ public class Date4uWebController {
   }
 
   @Autowired
-  public Date4uWebController(ProfileService profileService) {
+  public Date4uWebController(ProfileService profileService, UnicornService unicornService) {
     this.profileService = profileService;
+    this.unicornService = unicornService;
   }
 
-  @RequestMapping( "/**" )
+  @RequestMapping( "/" )
   public String indexPage(Model model) {
-    List<Profile> profiles = profileService.getProfiles();
-    model.addAttribute("totalProfiles", profiles.size());
-
     return "index";
   }
 
@@ -53,8 +53,13 @@ public class Date4uWebController {
       return "redirect:/";
     }
 
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    long myId = unicornService.getUnicorn(email).getProfile().getId();
+
     Profile profile = optionalProfile.get();
-    model.addAttribute("profile", new ProfileFormData(
+    model.addAttribute("myId", myId);
+    model.addAttribute("photos", profile.getPhotos());
+    model.addAttribute("profileFormData", new ProfileFormData(
             profile.getId(), profile.getNickname(), profile.getBirthdate(),
             profile.getManelength(), profile.getGender(),
             profile.getAttractedToGender(), profile.getDescription(),
@@ -67,6 +72,8 @@ public class Date4uWebController {
   @PostMapping( "/save" )
   public String saveProfile( @ModelAttribute ProfileFormData profile ) {
     log.info( profile.toString() );
+    profileService.saveProfile(profile);
+
     return "redirect:/profile/" + profile.getId();
   }
 

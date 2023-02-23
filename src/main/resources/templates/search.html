@@ -10,7 +10,7 @@
 <header data-th-insert="~{fragments/header :: header}"></header>
 
 <main>
-  <div class="container">
+  <div class="container mt-3">
     <form data-th-object="${search}" data-th-action="@{/search}" method="post">
       <div class="row">
         <div class="col-md-10 my-2">
@@ -47,9 +47,9 @@
           <div class="d-flex justify-content-center align-items-center">
             <select class="form-select form-select-sm" id="inputGender"
                     data-th-field="*{attractedToGender}">
-              <option th:value="0" th:text="BI"></option>
-              <option th:value="1" th:text="FEE"></option>
-              <option th:value="2" th:text="MA"></option>
+              <option th:value="0" th:text="D"></option>
+              <option th:value="1" th:text="Female"></option>
+              <option th:value="2" th:text="Male"></option>
             </select>
           </div>
         </div>
@@ -72,7 +72,7 @@
             <h5 data-th-text="${profile.nickname}" class="card-title">NICKNAME</h5>
             <p class="card-text">Age: <span data-th-text="${profile.getAge()}">AGE</span></p>
             <p class="card-text">Manelength: <span data-th-text="${profile.manelength}">MANELENGTH</span></p>
-            <a data-th-href="@{|/profile/${profile.id}|}" class="btn btn-primary btn-sm">Go to Profile</a>
+            <a data-th-href="@{|/profile/${profile.id}|}" class="btn btn-primary btn-sm px-2">Go to Profile</a>
           </div>
         </div>
       </div>
