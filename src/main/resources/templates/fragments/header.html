@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <body>
-<div data-th-fragment="header" class="container-fluid p-0">
+<div data-th-fragment="header(myId)" class="container-fluid p-0">
   <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
     <div class="container-fluid px-3">
       <div class="navbar-nav">
         <a class="navbar-brand" data-th-href="@{/}">Date4u</a>
         <a class="nav-item nav-link" data-th-href="@{/}">Home</a>
-        <a class="nav-link nav-item" data-th-href="@{/profile}">Profile</a>
-        <a class="nav-link nav-item" data-th-href="@{/search}">Search</a>
+        <a sec:authorize="isAuthenticated()" class="nav-link nav-item" data-th-href="@{|/profile/${myId}|}">Profile</a>
+        <a sec:authorize="isAuthenticated()" class="nav-link nav-item" data-th-href="@{/search}">Search</a>
       </div>
 
       <a sec:authorize="isAnonymous()" class="btn btn-primary btn-sm px-2" data-th-href="@{/login}">Login</a>

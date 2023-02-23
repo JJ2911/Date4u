@@ -24,7 +24,7 @@ import java.util.Optional;
 public class Date4uWebController {
   private ProfileService profileService;
   private UnicornService unicornService;
-  private final Logger log = LoggerFactory.getLogger( getClass() );
+  private final Logger log = LoggerFactory.getLogger(getClass());
 
   private boolean isAuthenticated() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -35,29 +35,35 @@ public class Date4uWebController {
     return authentication.isAuthenticated();
   }
 
+  private long getMyId() {
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    return unicornService.getUnicorn(email).getProfile().getId();
+  }
+
   @Autowired
   public Date4uWebController(ProfileService profileService, UnicornService unicornService) {
     this.profileService = profileService;
     this.unicornService = unicornService;
   }
 
-  @RequestMapping( "/" )
+  @RequestMapping("/")
   public String indexPage(Model model) {
+    if (isAuthenticated()) {
+      model.addAttribute("myId", getMyId());
+    }
+
     return "index";
   }
 
-  @RequestMapping( "/profile/{id}" )
+  @RequestMapping("/profile/{id}")
   public String profilePage(@PathVariable long id, Model model) {
     Optional<Profile> optionalProfile = profileService.getProfile(id);
     if (optionalProfile.isEmpty()) {
       return "redirect:/";
     }
 
-    String email = SecurityContextHolder.getContext().getAuthentication().getName();
-    long myId = unicornService.getUnicorn(email).getProfile().getId();
-
     Profile profile = optionalProfile.get();
-    model.addAttribute("myId", myId);
+    model.addAttribute("myId", getMyId());
     model.addAttribute("photos", profile.getPhotos());
     model.addAttribute("profileFormData", new ProfileFormData(
             profile.getId(), profile.getNickname(), profile.getBirthdate(),
@@ -69,25 +75,26 @@ public class Date4uWebController {
     return "profile";
   }
 
-  @PostMapping( "/save" )
-  public String saveProfile( @ModelAttribute ProfileFormData profile ) {
-    log.info( profile.toString() );
+  @PostMapping("/save")
+  public String saveProfile(@ModelAttribute ProfileFormData profile) {
+    log.info(profile.toString());
     profileService.saveProfile(profile);
 
     return "redirect:/profile/" + profile.getId();
   }
 
-  @RequestMapping( "/search" )
+  @RequestMapping("/search")
   public String searchPage(Model model) {
+    model.addAttribute("myId", getMyId());
     model.addAttribute("profiles", profileService.getProfiles());
     model.addAttribute("search", new SearchFormData());
 
     return "search";
   }
 
-  @PostMapping( "/search" )
-  public String searchProfile( @ModelAttribute SearchFormData searchFormData, Model model ) {
-    log.info( searchFormData.toString() );
+  @PostMapping("/search")
+  public String searchProfile(@ModelAttribute SearchFormData searchFormData, Model model) {
+    log.info(searchFormData.toString());
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Profile profile = profileService.getProfile(authentication.getName());
@@ -99,9 +106,10 @@ public class Date4uWebController {
     return "search";
   }
 
-  @RequestMapping( "/login" )
-  public String login() {
+  @RequestMapping("/login")
+  public String login(Model model) {
     if (isAuthenticated()) {
+      model.addAttribute("myId", getMyId());
       return "redirect:/";
     }
 
