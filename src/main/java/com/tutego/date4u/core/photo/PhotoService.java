@@ -43,7 +43,7 @@ public class PhotoService {
   }
 
   public String upload( byte[] imageBytes ) {
-    Future<byte[]> thumbnailBytes = thumbnail.thumbnail( imageBytes );
+//    Future<byte[]> thumbnailBytes = thumbnail.thumbnail( imageBytes );
 
     String imageName = UUID.randomUUID().toString();
 
@@ -54,13 +54,13 @@ public class PhotoService {
     fs.store( imageName + ".jpg", imageBytes );
 
     // Second: store thumbnail
-    try {
-      log.info( "upload" );
-      fs.store( imageName + "-thumb.jpg", thumbnailBytes.get() );
-    }
-    catch ( InterruptedException | ExecutionException e ) {
-      throw new IllegalStateException( e );
-    }
+//    try {
+//      log.info( "upload" );
+//      fs.store( imageName + "-thumb.jpg", thumbnailBytes.get() );
+//    }
+//    catch ( InterruptedException | ExecutionException e ) {
+//      throw new IllegalStateException( e );
+//    }
 
     return imageName;
   }

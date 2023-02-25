@@ -4,21 +4,23 @@ import com.tutego.date4u.core.profile.Profile;
 import jakarta.persistence.*;
 
 @Entity
-@Access( AccessType.FIELD )
+@Access(AccessType.FIELD)
 public class Unicorn {
 
-  @Id @GeneratedValue( strategy = GenerationType.IDENTITY )
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String email;
   private String password;
 
-  @OneToOne
-  @JoinColumn( name = "profile_fk" )
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "profile_fk")
   private Profile profile;
 
-  protected Unicorn() {}
+  protected Unicorn() {
+  }
 
-  public Unicorn( String email, String password, Profile profile ) {
+  public Unicorn(String email, String password, Profile profile) {
     this.email = email;
     this.password = password;
     this.profile = profile;
@@ -32,7 +34,7 @@ public class Unicorn {
     return email;
   }
 
-  public void setEmail( String email ) {
+  public void setEmail(String email) {
     this.email = email;
   }
 
@@ -40,7 +42,7 @@ public class Unicorn {
     return password;
   }
 
-  public void setPassword( String password ) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
@@ -48,11 +50,12 @@ public class Unicorn {
     return profile;
   }
 
-  public void setProfile( Profile profile ) {
+  public void setProfile(Profile profile) {
     this.profile = profile;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "Unicorn[" + "id=" + id + ']';
   }
 }

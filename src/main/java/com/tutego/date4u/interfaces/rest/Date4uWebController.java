@@ -1,7 +1,10 @@
 package com.tutego.date4u.interfaces.rest;
 
+import com.tutego.date4u.core.photo.Photo;
+import com.tutego.date4u.core.photo.PhotoService;
 import com.tutego.date4u.core.profile.Profile;
 import com.tutego.date4u.core.profile.ProfileService;
+import com.tutego.date4u.core.profile.unicorn.Unicorn;
 import com.tutego.date4u.core.profile.unicorn.UnicornService;
 import com.tutego.date4u.interfaces.rest.profile.ProfileFormData;
 import org.slf4j.Logger;
@@ -12,16 +15,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class Date4uWebController {
+  private PhotoService photoService;
   private ProfileService profileService;
   private UnicornService unicornService;
   private final Logger log = LoggerFactory.getLogger(getClass());
@@ -41,9 +47,10 @@ public class Date4uWebController {
   }
 
   @Autowired
-  public Date4uWebController(ProfileService profileService, UnicornService unicornService) {
+  public Date4uWebController(ProfileService profileService, UnicornService unicornService, PhotoService photoService) {
     this.profileService = profileService;
     this.unicornService = unicornService;
+    this.photoService = photoService;
   }
 
   @RequestMapping("/")
@@ -76,9 +83,10 @@ public class Date4uWebController {
   }
 
   @PostMapping("/save")
-  public String saveProfile(@ModelAttribute ProfileFormData profile) {
+  public String saveProfile(@ModelAttribute ProfileFormData profile, RedirectAttributes redirectAttributes) {
     log.info(profile.toString());
     profileService.saveProfile(profile);
+    redirectAttributes.addFlashAttribute("message", "You successfully updated your profile.");
 
     return "redirect:/profile/" + profile.getId();
   }
@@ -107,12 +115,52 @@ public class Date4uWebController {
   }
 
   @RequestMapping("/login")
-  public String login(Model model) {
+  public String login() {
     if (isAuthenticated()) {
-      model.addAttribute("myId", getMyId());
       return "redirect:/";
     }
 
     return "login";
+  }
+
+  @RequestMapping("/signup")
+  public String signup(Model model) {
+    if (isAuthenticated()) {
+      return "redirect:/";
+    }
+
+    model.addAttribute("signUpFormData", new SignUpFormData());
+    model.addAttribute("max", LocalDate.now().minusYears(18));
+    return "signup";
+  }
+
+  @PostMapping("/signup")
+  public String signup(@ModelAttribute SignUpFormData signUpFormData,
+                       @RequestParam("file") MultipartFile file,
+                       RedirectAttributes redirectAttributes) throws IOException {
+    Profile profile = new Profile(
+            signUpFormData.getNickname(),
+            signUpFormData.getBirthdate(),
+            signUpFormData.getManelength(),
+            signUpFormData.getGender(),
+            signUpFormData.getAttractedToGender(),
+            signUpFormData.getDescription(),
+            LocalDateTime.now());
+
+    Unicorn unicorn = new Unicorn(
+            signUpFormData.getEmail(),
+            signUpFormData.getPassword(),
+            profile);
+
+    profile.setUnicorn(unicorn);
+
+    String imageName = photoService.upload(file.getBytes());
+    Photo photo = new Photo(profile, imageName, true, LocalDateTime.now());
+    profile.add(photo);
+
+    unicornService.createUnicorn(unicorn);
+    redirectAttributes.addFlashAttribute("message", "You successfully created your profile.");
+
+    return "redirect:/login";
   }
 }

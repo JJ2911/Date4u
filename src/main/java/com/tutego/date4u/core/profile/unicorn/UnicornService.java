@@ -15,4 +15,8 @@ public class UnicornService {
   public Unicorn getUnicorn(String email) {
     return unicornRepository.findUnicornByEmail(email).get();
   }
+
+  public void createUnicorn(Unicorn unicorn) {
+    unicornRepository.save(unicorn);
+  }
 }
